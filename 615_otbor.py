@@ -1,7 +1,7 @@
 import feedparser
 import requests
 from bs4 import BeautifulSoup
-from requests import Response
+
 
 url_for_parse = 'http://zakupki.gov.ru/epz/order/extendedsearch/rss?searchString=%D0%BE%D1%82%D0%B1%D0%BE%D1%80&morphology=on&openMode=USE_DEFAULT_PARAMS&pageNumber=1&sortDirection=false&recordsPerPage=_10&showLotsInfoHidden=false&ppRf615=on&af=on&currencyIdGeneral=-1&regionDeleted=false&oktmoIdsWithNested=on&sortBy=UPDATE_DATE'
 user_agent_string = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36'
@@ -27,8 +27,10 @@ for x in d['entries']:
         soup = BeautifulSoup(page.text, features="html.parser")
         all_td = soup.select('td')
         for i in range(len(all_td)):
+            if all_td[i].getText() == 'Наименование закупки':
+                print('Тема отбора: ' + all_td[i+1].getText().strip(' \n'))
             if all_td[i].getText() == 'Наименование организации':
-                print('Наименование организации: ' + all_td[i+1].getText().strip(' \n'))
+                print('Организатор: ' + all_td[i+1].getText().strip(' \n'))
             if all_td[i].getText() == 'Регион':
                 print('Регион: ' + all_td[i+1].getText(), end='  ')
             if all_td[i].getText() == 'Дата и время начала срока подачи заявок на участие в предварительном отборе':
