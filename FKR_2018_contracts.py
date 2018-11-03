@@ -1,10 +1,26 @@
 import feedparser
 import requests
 from bs4 import BeautifulSoup
+from openpyxl import Workbook
 
-
+# ссылка на rss, которую парсим
 url_for_parse = 'http://zakupki.gov.ru/epz/capitalrepairs/extendedsearch/rss.html?morphology=on&pageNumber=1&sortDirection=false&recordsPerPage=_10&sortBy=UPDATE_DATE&contractStage_0=on&contractStage_1=on&contractStage_2=on&contractStage=0%2C1%2C2&customerTitle=%D0%9D%D0%95%D0%9A%D0%9E%D0%9C%D0%9C%D0%95%D0%A0%D0%A7%D0%95%D0%A1%D0%9A%D0%90%D0%AF+%D0%9E%D0%A0%D0%93%D0%90%D0%9D%D0%98%D0%97%D0%90%D0%A6%D0%98%D0%AF+%22%D0%A4%D0%9E%D0%9D%D0%94-%D0%A0%D0%95%D0%93%D0%98%D0%9E%D0%9D%D0%90%D0%9B%D0%AC%D0%9D%D0%AB%D0%99+%D0%9E%D0%9F%D0%95%D0%A0%D0%90%D0%A2%D0%9E%D0%A0+%D0%9A%D0%90%D0%9F%D0%98%D0%A2%D0%90%D0%9B%D0%AC%D0%9D%D0%9E%D0%93%D0%9E+%D0%A0%D0%95%D0%9C%D0%9E%D0%9D%D0%A2%D0%90+%D0%9E%D0%91%D0%A9%D0%95%D0%93%D0%9E+%D0%98%D0%9C%D0%A3%D0%A9%D0%95%D0%A1%D0%A2%D0%92%D0%90+%D0%92+%D0%9C%D0%9D%D0%9E%D0%93%D0%9E%D0%9A%D0%92%D0%90%D0%A0%D0%A2%D0%98%D0%A0%D0%9D%D0%AB%D0%A5+%D0%94%D0%9E%D0%9C%D0%90%D0%A5%22&customerCode=05727000001&customerFz94id=2190472&regionDeleted=false'
+# Строка юзер-агент для того, чтобы zakupki.gov.ru отвечал корректно
 user_agent_string = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36'
+# Создаем екзель таблицу
+wb = Workbook()
+ws = wb.active
+ws['A1']= 'Номер реестровой записи'
+ws['B1']= 'Этап договора'
+ws['C1']= 'Дата заключения договора'
+ws['D1']= 'Номер договора'
+ws['E1']= 'Цена договора, рублей'
+ws['F1']= 'Дата начала исполнения договора'
+ws['G1']= 'Дата окончания исполнения договора'
+ws['H1']= 'Подрядчик'
+ws['I1']= 'Контактный телефон'
+ws['J1']= 'Электронная почта'
+
 
 d = feedparser.parse(url_for_parse)
 number_of_rec: int = 0
@@ -29,23 +45,35 @@ for x in d['entries']:
         for i in range(len(all_td)):
             if all_td[i].getText() == 'Номер реестровой записи':
                 print('Номер реестровой записи: ' + all_td[i+1].getText().strip(' \n'))
+                ws['A'+str(number_of_rec)]= all_td[i+1].getText().strip(' \n')
             if all_td[i].getText() == 'Этап договора':
                 print('Этап договора: ' + all_td[i+1].getText().strip(' \n'))
+                ws['B' + str(number_of_rec)] = all_td[i + 1].getText().strip(' \n')
             if all_td[i].getText() == 'Дата заключения договора':
                 print('Дата заключения договора: ' + all_td[i+1].getText().strip(' \n'))
+                ws['C' + str(number_of_rec)] = all_td[i + 1].getText().strip(' \n')
             if all_td[i].getText() == 'Номер договора':
                 print('Номер договора: ' + all_td[i+1].getText())
+                ws['D' + str(number_of_rec)] = all_td[i + 1].getText().strip(' \n')
             if all_td[i].getText() == 'Цена договора, рублей':
                 print('Цена договора, рублей : ' + all_td[i+1].getText().strip(' \n'))
+                ws['E' + str(number_of_rec)] = all_td[i + 1].getText().strip(' \n')
             if all_td[i].getText() == 'Дата начала исполнения договора':
                 print('Дата начала исполнения договора: ' + all_td[i+1].getText().strip(' \n'))
+                ws['F' + str(number_of_rec)] = all_td[i + 1].getText().strip(' \n')
             if all_td[i].getText() == 'Дата окончания исполнения договора':
                 print('Дата окончания исполнения договора: ' + all_td[i+1].getText().strip(' \n'))
+                ws['G' + str(number_of_rec)] = all_td[i + 1].getText().strip(' \n')
             if all_td[i].getText() == 'Полное наименование ЮЛ / ФИО индивидуального предпринимателя':
                 print('Подрядчик: ' + all_td[i + 1].getText().strip(' \n'))
+                ws['H' + str(number_of_rec)] = all_td[i + 1].getText().strip(' \n')
             if all_td[i].getText() == 'Контактный телефон':
                 print('Контактный телефон: ' + all_td[i + 1].getText().strip(' \n'))
+                ws['I' + str(number_of_rec)] = all_td[i + 1].getText().strip(' \n')
             if all_td[i].getText() == 'Электронная почта':
                 print('Электронная почта: ' + all_td[i + 1].getText().strip(' \n'))
+                ws['J' + str(number_of_rec)] = all_td[i + 1].getText().strip(' \n')
 
 print('--------------------------------------------')
+
+wb.save('test1.xlsx')
