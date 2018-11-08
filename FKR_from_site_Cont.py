@@ -27,8 +27,6 @@ if len(page) > 0:
         print (tdtag[1].getText())
         print (tdtag[2].getText())
         print (tdtag[3].getText())
-#        print (tdtag[7].getText())
-#        if tdtag[0].getText() == '796/Д/ИС/ТС':
         atag=tdtag[7].findAll('a')
         if len(atag) == 1:
             url_for_parse_1 = atag[0].get('href')
