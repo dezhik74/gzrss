@@ -1,2 +1,2 @@
-venv\Scripts\python.exe 615_otbor.py
+venv\Scripts\python.exe otbor615.py
 pause

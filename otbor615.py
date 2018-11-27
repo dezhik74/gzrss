@@ -1,6 +1,5 @@
 import feedparser
 import requests
-import sys
 from bs4 import BeautifulSoup
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Side, NamedStyle
@@ -11,6 +10,7 @@ user_agent_string = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, lik
 def Main ():
     Parse_list = Parse615OtborRSS(url_for_parse)
     SaveExcel(Parse_list, 'otbor615.xlsx')
+
 
 def Parse_2_level_Link(url, payload, headers):
     Result_List2 = {}
@@ -35,10 +35,11 @@ def Parse615OtborRSS (rss_url):
     d = feedparser.parse(rss_url)
     number_of_rec: int = 0
     result_list= []
+    total_entries = len(d['entries'])
     for x in d['entries']:
         current_row = {'Name': x['title'], 'Link': x['link']}
         number_of_rec += 1
-        print(str(number_of_rec) + ' ------------------------------------------')
+        print('{0} из {1} -----------------------'.format(number_of_rec, total_entries))
         print(x['title'])
         s = x['link'].split('?')[1]
         url = x['link'].split('?')[0]
