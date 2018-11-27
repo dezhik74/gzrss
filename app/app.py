@@ -1,4 +1,6 @@
 from flask import Flask
+from config import Configuration
 
 app = Flask(__name__)
-from app import views
+app.config.from_object(Configuration)
+#from app import views
