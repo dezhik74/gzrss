@@ -16,7 +16,18 @@ def load_from_xml(filename):
         print(i.getText())
 
 def loadfromftp ():
-    pass
+    con = FTP('ftp.zakupki.gov.ru', 'free', 'free')
+
+    con.cwd('/fcs_regions/Sankt-Peterburg/pprf615docs/notifications/prevMonth')
+    data = con.nlst()
+    for work_name in data:
+        size = con.size(work_name)
+        print(work_name + " размер= " + str(size))
+        file = open('.\\ftpl\\' + work_name, 'wb')
+        con.retrbinary('RETR ' + work_name, file.write)
+        file.close()
+
 
 if __name__ == '__main__':
-    load_from_xml('tst.xml')
+#    load_from_xml('tst.xml')
+    loadfromftp()
